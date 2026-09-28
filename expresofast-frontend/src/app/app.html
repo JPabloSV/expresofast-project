@@ -1,0 +1,12 @@
+﻿<header class="barra">
+  <span class="marca">{{ title() }}</span>
+  <nav aria-label="Navegación principal">
+    <a routerLink="/envios" routerLinkActive="activo">Envíos</a>
+    <a routerLink="/nuevo-envio" routerLinkActive="activo">Nuevo envío</a>
+    <a routerLink="/rastreo" routerLinkActive="activo">Rastreo</a>
+  </nav>
+</header>
+
+<main class="contenido">
+  <router-outlet />
+</main>

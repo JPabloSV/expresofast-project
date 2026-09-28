@@ -1,0 +1,51 @@
+﻿<section>
+  <h1>Nuevo envío</h1>
+
+  @if (exito()) {
+    <p class="exito" role="status">
+      {{ exito() }}
+      <button type="button" class="enlace" (click)="verEnvios()">Ver envíos</button>
+    </p>
+  }
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  <form #formulario="ngForm" (ngSubmit)="guardar()">
+    <label for="destinatario">Destinatario</label>
+    <input
+      id="destinatario"
+      name="destinatario"
+      type="text"
+      required
+      minlength="3"
+      [(ngModel)]="destinatario"
+    />
+
+    <label for="direccion">Dirección de destino</label>
+    <input
+      id="direccion"
+      name="direccionDestino"
+      type="text"
+      required
+      minlength="5"
+      [(ngModel)]="direccionDestino"
+    />
+
+    <label for="flete">Monto de flete</label>
+    <input
+      id="flete"
+      name="montoFlete"
+      type="number"
+      required
+      min="0.01"
+      step="0.01"
+      [(ngModel)]="montoFlete"
+    />
+
+    <button type="submit" [disabled]="formulario.invalid || guardando()">
+      {{ guardando() ? 'Guardando...' : 'Registrar envío' }}
+    </button>
+  </form>
+</section>

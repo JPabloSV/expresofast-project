@@ -1,0 +1,69 @@
+﻿<section>
+  <h1>Rastrear guía</h1>
+
+  <form class="busqueda" #formulario="ngForm" (ngSubmit)="buscar()">
+    <label for="codigo">Código de rastreo</label>
+    <div class="fila">
+      <input
+        id="codigo"
+        name="codigo"
+        type="text"
+        required
+        placeholder="EXP-2026-1001"
+        [(ngModel)]="codigo"
+      />
+      <button type="submit" [disabled]="formulario.invalid || buscando()">
+        {{ buscando() ? 'Buscando...' : 'Buscar' }}
+      </button>
+    </div>
+  </form>
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  @if (envio(); as e) {
+    <article class="ficha">
+      <header class="ficha-encabezado">
+        <h2>{{ e.codigoRastreo }}</h2>
+        <span [class]="claseEstado(e.estado)">{{ e.estado }}</span>
+      </header>
+
+      <dl>
+        <dt>Destinatario</dt>
+        <dd>{{ e.destinatario }}</dd>
+        <dt>Dirección de destino</dt>
+        <dd>{{ e.direccionDestino }}</dd>
+        <dt>Monto de flete</dt>
+        <dd>{{ e.montoFlete | number: '1.2-2' }}</dd>
+        <dt>Fecha de creación</dt>
+        <dd>{{ e.fechaCreacion | date: 'dd/MM/yyyy HH:mm' }}</dd>
+      </dl>
+
+      <div
+        class="barra"
+        role="progressbar"
+        aria-label="Progreso de entrega"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [attr.aria-valuenow]="porcentaje(e.estado)"
+      >
+        <div
+          class="relleno"
+          [class.cancelado]="e.estado === 'CANCELADO'"
+          [style.width.%]="porcentaje(e.estado)"
+        ></div>
+      </div>
+
+      <ol class="pasos">
+        @for (paso of pasos; track paso) {
+          <li [class.alcanzado]="alcanzado(paso, e.estado)">{{ paso }}</li>
+        }
+      </ol>
+
+      @if (e.estado === 'CANCELADO') {
+        <p class="aviso-cancelado">Este envío fue cancelado y no continuará su recorrido.</p>
+      }
+    </article>
+  }
+</section>

@@ -1,0 +1,89 @@
+﻿.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 {
+  margin: 0 0 1rem;
+}
+
+button {
+  padding: 0.45rem 0.9rem;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+th {
+  background: #f1f5f9;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+select {
+  padding: 0.35rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+.insignia {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.pendiente {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.en_transito {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.entregado {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.cancelado {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.error {
+  padding: 0.75rem 1rem;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 6px;
+}

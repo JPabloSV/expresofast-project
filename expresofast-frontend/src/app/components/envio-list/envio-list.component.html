@@ -1,0 +1,49 @@
+﻿<section>
+  <div class="encabezado">
+    <h1>Envíos</h1>
+    <button type="button" (click)="cargar()">Actualizar</button>
+  </div>
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  @if (cargando()) {
+    <p>Cargando envíos...</p>
+  } @else if (envios().length === 0 && !error()) {
+    <p>No hay envíos registrados.</p>
+  } @else if (envios().length > 0) {
+    <div class="tabla-contenedor">
+      <table>
+        <thead>
+          <tr>
+            <th>Código de rastreo</th>
+            <th>Destinatario</th>
+            <th>Dirección</th>
+            <th>Flete</th>
+            <th>Estado</th>
+            <th>Cambiar estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (envio of envios(); track envio.id) {
+            <tr>
+              <td>{{ envio.codigoRastreo }}</td>
+              <td>{{ envio.destinatario }}</td>
+              <td>{{ envio.direccionDestino }}</td>
+              <td>{{ envio.montoFlete }}</td>
+              <td><span [class]="claseEstado(envio.estado)">{{ envio.estado }}</span></td>
+              <td>
+                <select [attr.aria-label]="'Estado de ' + envio.codigoRastreo" (change)="cambiarEstado(envio, $event)">
+                  @for (e of estados; track e) {
+                    <option [value]="e" [selected]="e === envio.estado">{{ e }}</option>
+                  }
+                </select>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
