@@ -3,7 +3,8 @@
 Universidad de Costa Rica, Sede del Atlántico, Recinto de Paraíso.
 Carrera de Informática Empresarial. Curso IF0009 - Desarrollo de Software IV. Semestre II-2026.
 
-Estudiante: JPabloSV.
+Estudiante: Juan Pablo Solano Vásquez
+Carnet: C5K023
 
 Migración de la consola logística ExpresoFast a una Single Page Application en Angular Standalone, conectada a un backend RESTful por capas en Spring Boot. Es un proyecto independiente de los laboratorios 5 a 9.
 
