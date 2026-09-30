@@ -1,4 +1,4 @@
-﻿<section>
+<section>
   <h1>Nuevo envío</h1>
 
   @if (exito()) {
@@ -12,7 +12,7 @@
     <p class="error" role="alert">{{ error() }}</p>
   }
 
-  <form #formulario="ngForm" (ngSubmit)="guardar()">
+  <form #formulario="ngForm" (ngSubmit)="guardar(formulario)">
     <label for="destinatario">Destinatario</label>
     <input
       id="destinatario"

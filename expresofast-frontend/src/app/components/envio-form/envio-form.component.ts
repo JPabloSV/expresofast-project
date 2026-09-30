@@ -1,5 +1,5 @@
-﻿import { Component, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EnvioService } from '../../services/envio.service';
 import { CrearEnvioPayload } from '../../models/envio.model';
@@ -22,7 +22,7 @@ export class EnvioFormComponent {
   readonly exito = signal('');
   readonly error = signal('');
 
-  guardar(): void {
+  guardar(formulario: NgForm): void {
     if (this.montoFlete === null) {
       return;
     }
@@ -40,7 +40,7 @@ export class EnvioFormComponent {
       next: (envio) => {
         this.guardando.set(false);
         this.exito.set('Envío registrado con el código ' + envio.codigoRastreo + '.');
-        this.limpiar();
+        formulario.resetForm();
       },
       error: () => {
         this.guardando.set(false);
