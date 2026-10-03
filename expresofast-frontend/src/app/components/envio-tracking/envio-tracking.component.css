@@ -1,4 +1,4 @@
-﻿h1 {
+h1 {
   margin: 0 0 1rem;
 }
 
@@ -154,4 +154,23 @@ dd {
 .cancelado {
   background: #fee2e2;
   color: #991b1b;
+}
+
+.paquetes {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: collapse;
+}
+
+.paquetes caption {
+  text-align: left;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.paquetes th,
+.paquetes td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
 }

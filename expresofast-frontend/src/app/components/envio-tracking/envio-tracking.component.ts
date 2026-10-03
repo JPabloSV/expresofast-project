@@ -1,12 +1,12 @@
-﻿import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EnvioService } from '../../services/envio.service';
 import { Envio, EstadoEnvio } from '../../models/envio.model';
 
 @Component({
-  imports: [FormsModule, DatePipe, DecimalPipe],
+  imports: [ReactiveFormsModule, DatePipe, DecimalPipe],
   selector: 'app-envio-tracking',
   styleUrl: './envio-tracking.component.css',
   templateUrl: './envio-tracking.component.html',
@@ -16,14 +16,16 @@ export class EnvioTrackingComponent {
 
   readonly pasos: EstadoEnvio[] = ['PENDIENTE', 'EN_TRANSITO', 'ENTREGADO'];
 
-  codigo = '';
+  readonly busqueda = new FormGroup({
+    codigo: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+  });
 
   readonly envio = signal<Envio | null>(null);
   readonly buscando = signal(false);
   readonly error = signal('');
 
   buscar(): void {
-    const codigo = this.codigo.trim();
+    const codigo = this.busqueda.controls.codigo.value.trim();
     if (!codigo) {
       return;
     }

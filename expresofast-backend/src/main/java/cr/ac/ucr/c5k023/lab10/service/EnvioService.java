@@ -1,7 +1,9 @@
 package cr.ac.ucr.c5k023.lab10.service;
 
-import cr.ac.ucr.c5k023.lab10.dto.CrearEnvioDTO;
+import cr.ac.ucr.c5k023.lab10.dto.ConductorDTO;
 import cr.ac.ucr.c5k023.lab10.dto.EnvioDTO;
+import cr.ac.ucr.c5k023.lab10.dto.EnvioRegistroDTO;
+import cr.ac.ucr.c5k023.lab10.dto.VehiculoDTO;
 
 import java.util.List;
 
@@ -13,7 +15,13 @@ public interface EnvioService {
 
     EnvioDTO buscarPorCodigoRastreo(String codigo);
 
-    EnvioDTO registrar(CrearEnvioDTO dto);
+    boolean existeTracking(String numeroTracking);
 
-    EnvioDTO actualizarEstado(Long id, String nuevoEstado);
+    EnvioDTO registrar(EnvioRegistroDTO dto);
+
+    EnvioDTO actualizarEstado(Integer id, String nuevoEstado);
+
+    List<VehiculoDTO> obtenerVehiculos();
+
+    List<ConductorDTO> obtenerConductoresActivos();
 }

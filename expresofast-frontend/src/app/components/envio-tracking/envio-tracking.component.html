@@ -1,18 +1,16 @@
-﻿<section>
+<section>
   <h1>Rastrear guía</h1>
 
-  <form class="busqueda" #formulario="ngForm" (ngSubmit)="buscar()">
+  <form class="busqueda" [formGroup]="busqueda" (ngSubmit)="buscar()">
     <label for="codigo">Código de rastreo</label>
     <div class="fila">
       <input
         id="codigo"
-        name="codigo"
         type="text"
-        required
-        placeholder="EXP-2026-1001"
-        [(ngModel)]="codigo"
+        placeholder="EXP-1001"
+        formControlName="codigo"
       />
-      <button type="submit" [disabled]="formulario.invalid || buscando()">
+      <button type="submit" [disabled]="busqueda.invalid || buscando()">
         {{ buscando() ? 'Buscando...' : 'Buscar' }}
       </button>
     </div>
@@ -38,7 +36,29 @@
         <dd>{{ e.montoFlete | number: '1.2-2' }}</dd>
         <dt>Fecha de creación</dt>
         <dd>{{ e.fechaCreacion | date: 'dd/MM/yyyy HH:mm' }}</dd>
+        @if (e.fechaDespacho) {
+          <dt>Despacho / entrega estimada</dt>
+          <dd>{{ e.fechaDespacho | date: 'dd/MM/yyyy' : 'UTC' }} → {{ e.fechaEntregaEstimada | date: 'dd/MM/yyyy' : 'UTC' }}</dd>
+        }
+        <dt>Vehículo / conductor</dt>
+        <dd>{{ e.vehiculoPlaca }} · {{ e.conductorNombre }}</dd>
+        <dt>Peso total</dt>
+        <dd>{{ e.pesoKg | number: '1.2-2' }} kg</dd>
       </dl>
+
+      @if (e.paquetes.length > 0) {
+        <table class="paquetes">
+          <caption>Paquetes ({{ e.paquetes.length }})</caption>
+          <thead>
+            <tr><th>#</th><th>Descripción</th><th>Peso (kg)</th></tr>
+          </thead>
+          <tbody>
+            @for (p of e.paquetes; track p.id; let i = $index) {
+              <tr><td>{{ i + 1 }}</td><td>{{ p.descripcion }}</td><td>{{ p.pesoKg | number: '1.2-2' }}</td></tr>
+            }
+          </tbody>
+        </table>
+      }
 
       <div
         class="barra"

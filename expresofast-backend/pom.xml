@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -15,7 +15,7 @@
   <artifactId>expresofast-backend</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>ExpresoFast</name>
-  <description>Backend RESTful ExpresoFast - Laboratorio 10</description>
+  <description>Backend RESTful ExpresoFast - Laboratorio 11</description>
 
   <properties>
     <java.version>21</java.version>
@@ -35,9 +35,15 @@
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.microsoft.sqlserver</groupId>
+      <artifactId>mssql-jdbc</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!-- H2 solo para las pruebas automatizadas (modo de compatibilidad MSSQLServer) -->
+    <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <scope>runtime</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springdoc</groupId>

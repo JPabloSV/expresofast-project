@@ -1,0 +1,170 @@
+<section>
+  <h1>Nuevo envío</h1>
+  <p class="subtitulo">Registre el envío junto con todos los paquetes que viajan bajo el mismo número de rastreo.</p>
+
+  @if (exito()) {
+    <p class="exito" role="status">
+      {{ exito() }}
+      <button type="button" class="enlace" (click)="verEnvios()">Ver envíos</button>
+    </p>
+  }
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="registrar()" novalidate>
+    <!-- ===== Datos del envío ===== -->
+    <fieldset>
+      <legend>Datos del envío</legend>
+
+      <div class="campo">
+        <label for="tracking">Número de tracking</label>
+        <input id="tracking" type="text" formControlName="numeroTracking" placeholder="EXP-1234" autocomplete="off" />
+        @let tracking = form.controls.numeroTracking;
+        @if (tracking.pending) {
+          <small class="info">Verificando disponibilidad…</small>
+        } @else if (tracking.touched || tracking.dirty) {
+          @if (tracking.hasError('required')) {
+            <small class="msg-error">El número de tracking es obligatorio.</small>
+          } @else if (tracking.hasError('pattern')) {
+            <small class="msg-error">Formato inválido. Ejemplo: EXP-1234.</small>
+          } @else if (tracking.hasError('trackingTomado')) {
+            <small class="msg-error">Este número de rastreo ya está en uso</small>
+          } @else if (tracking.valid) {
+            <small class="ok">Número disponible.</small>
+          }
+        }
+      </div>
+
+      <div class="campo">
+        <label for="destinatario">Destinatario</label>
+        <input id="destinatario" type="text" formControlName="destinatario" />
+        @if (form.controls.destinatario.touched && form.controls.destinatario.invalid) {
+          <small class="msg-error">Indique un destinatario de 3 a 150 caracteres.</small>
+        }
+      </div>
+
+      <div class="campo ancho">
+        <label for="direccion">Dirección de destino</label>
+        <input id="direccion" type="text" formControlName="direccionDestino" />
+        @if (form.controls.direccionDestino.touched && form.controls.direccionDestino.invalid) {
+          <small class="msg-error">Indique una dirección de 5 a 200 caracteres.</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="flete">Monto de flete (₡)</label>
+        <input id="flete" type="number" min="0.01" step="0.01" formControlName="montoFlete" />
+        @if (form.controls.montoFlete.touched && form.controls.montoFlete.invalid) {
+          <small class="msg-error">El monto debe ser mayor que cero.</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="vehiculo">Vehículo</label>
+        <select id="vehiculo" formControlName="vehiculoId">
+          <option [ngValue]="null" disabled>Seleccione…</option>
+          @for (v of vehiculos(); track v.id) {
+            <option [ngValue]="v.id">{{ v.placa }} · {{ v.capacidadKg | number: '1.0-2' }} kg · {{ v.estado }}</option>
+          }
+        </select>
+        @if (form.controls.vehiculoId.touched && form.controls.vehiculoId.invalid) {
+          <small class="msg-error">Seleccione un vehículo.</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="conductor">Conductor</label>
+        <select id="conductor" formControlName="conductorId">
+          <option [ngValue]="null" disabled>Seleccione…</option>
+          @for (c of conductores(); track c.id) {
+            <option [ngValue]="c.id">{{ c.nombreCompleto }}</option>
+          }
+        </select>
+        @if (form.controls.conductorId.touched && form.controls.conductorId.invalid) {
+          <small class="msg-error">Seleccione un conductor.</small>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="despacho">Fecha de despacho</label>
+        <input id="despacho" type="date" formControlName="fechaDespacho" />
+      </div>
+
+      <div class="campo">
+        <label for="entrega">Fecha de entrega estimada</label>
+        <input
+          id="entrega"
+          type="date"
+          formControlName="fechaEntregaEstimada"
+          [class.invalido-grupo]="form.hasError('fechasInvalidas')"
+        />
+      </div>
+
+      <!-- Error GLOBAL producido por el validador cruzado del FormGroup -->
+      @if (form.hasError('fechasInvalidas')) {
+        <p class="error ancho" role="alert">
+          La fecha de entrega estimada debe ser posterior a la fecha de despacho.
+        </p>
+      }
+    </fieldset>
+
+    <!-- ===== Paquetes (FormArray) ===== -->
+    <fieldset formArrayName="paquetes">
+      <legend>Paquetes ({{ paquetes.length }})</legend>
+
+      @for (paquete of paquetes.controls; track paquete; let i = $index) {
+        <div class="paquete" [formGroupName]="i">
+          <span class="numero">{{ i + 1 }}</span>
+
+          <div class="campo">
+            <label [for]="'desc-' + i">Descripción</label>
+            <input [id]="'desc-' + i" type="text" formControlName="descripcion" placeholder="Caja de documentos" />
+            @if (paquete.controls.descripcion.touched && paquete.controls.descripcion.invalid) {
+              <small class="msg-error">La descripción es obligatoria.</small>
+            }
+          </div>
+
+          <div class="campo peso">
+            <label [for]="'peso-' + i">Peso (kg)</label>
+            <input [id]="'peso-' + i" type="number" min="0.01" max="999.99" step="0.01" formControlName="pesoKg" />
+            @if (paquete.controls.pesoKg.touched && paquete.controls.pesoKg.invalid) {
+              <small class="msg-error">Entre 0.01 y 999.99 kg.</small>
+            }
+          </div>
+
+          <button
+            type="button"
+            class="quitar"
+            [disabled]="paquetes.length === 1"
+            [attr.aria-label]="'Eliminar paquete ' + (i + 1)"
+            [title]="paquetes.length === 1 ? 'El envío debe tener al menos un paquete' : 'Eliminar paquete'"
+            (click)="eliminarPaquete(i)"
+          >
+            X
+          </button>
+        </div>
+      }
+
+      <div class="pie-paquetes">
+        <button type="button" class="secundario" (click)="agregarPaquete()">+ Añadir Paquete</button>
+        <span>
+          Peso total: <strong>{{ pesoTotal | number: '1.2-2' }} kg</strong>
+          @if (vehiculoSeleccionado; as v) {
+            <span [class.excedido]="pesoTotal > v.capacidadKg">
+              / capacidad {{ v.capacidadKg | number: '1.0-2' }} kg
+            </span>
+          }
+        </span>
+      </div>
+    </fieldset>
+
+    <div class="acciones">
+      <button type="button" class="secundario" (click)="limpiar()">Limpiar</button>
+      <button type="submit" [disabled]="form.invalid || form.pending || guardando()">
+        {{ guardando() ? 'Guardando...' : 'Registrar envío' }}
+      </button>
+    </div>
+  </form>
+</section>
